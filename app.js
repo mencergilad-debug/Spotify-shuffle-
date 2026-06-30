@@ -1,5 +1,5 @@
 const PLAYLIST_NAME = 'Liked Songs – True Shuffle';
-const SCOPES = ['user-library-read', 'playlist-read-private', 'playlist-modify-private'];
+const SCOPES = ['user-library-read', 'user-read-private', 'playlist-read-private', 'playlist-modify-private', 'playlist-modify-public'];
 const AUTH_URL = 'https://accounts.spotify.com/authorize';
 const TOKEN_URL = 'https://accounts.spotify.com/api/token';
 const API = 'https://api.spotify.com/v1';
