@@ -116,8 +116,10 @@ async function spotify(path, options = {}) {
   if (res.status === 204) return null;
   const text = await res.text();
   const data = text ? JSON.parse(text) : null;
-  if (!res.ok) throw new Error(data?.error?.message || `Spotify API error ${res.status}`);
-  return data;
+  if (!res.ok) {
+  console.log('Spotify error:', path, res.status, data);
+  throw new Error(`${path} - ${res.status} - ${JSON.stringify(data)}`);
+}
 }
 
 async function getAllSavedTrackUris() {
