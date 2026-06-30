@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Spotify True Shuffle</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <main class="app">
+    <section class="card">
+      <h1>Spotify True Shuffle</h1>
+      <p class="muted">Creates or refreshes a private playlist called <strong>Liked Songs – True Shuffle</strong>.</p>
+
+      <div id="setupBox" class="setup">
+        <label for="clientId">Spotify Client ID</label>
+        <input id="clientId" placeholder="Paste your Spotify Client ID" autocomplete="off" />
+        <button id="saveClientId">Save Client ID</button>
+      </div>
+
+      <div class="actions">
+        <button id="loginBtn">Connect Spotify</button>
+        <button id="refreshBtn" disabled>Refresh True Shuffle</button>
+        <button id="logoutBtn" class="secondary" disabled>Disconnect</button>
+      </div>
+
+      <div id="status" class="status">Not connected.</div>
+      <progress id="progress" value="0" max="100" hidden></progress>
+
+      <div class="instructions">
+        <h2>How to play it</h2>
+        <ol>
+          <li>Tap <strong>Refresh True Shuffle</strong>.</li>
+          <li>Open Spotify.</li>
+          <li>Play <strong>Liked Songs – True Shuffle</strong>.</li>
+          <li>Keep Spotify <strong>Shuffle OFF</strong> and <strong>Repeat OFF</strong>.</li>
+        </ol>
+      </div>
+    </section>
+  </main>
+  <script src="app.js"></script>
+</body>
+</html>
