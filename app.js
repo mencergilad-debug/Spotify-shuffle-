@@ -209,7 +209,7 @@ async function findOrCreatePlaylist(userId) {
     url = data.next;
   }
 
-  return await spotify(`/users/${encodeURIComponent(userId)}/playlists`, {
+  return await spotify(`/me/playlists`, {
     method: 'POST',
     body: JSON.stringify({
       name: PLAYLIST_NAME,
@@ -222,111 +222,4 @@ async function findOrCreatePlaylist(userId) {
 function chunks(arr, size) {
   const out = [];
 
-  for (let i = 0; i < arr.length; i += size) {
-    out.push(arr.slice(i, i + size));
-  }
-
-  return out;
-}
-
-async function replacePlaylist(playlistId, uris) {
-  const groups = chunks(uris, 100);
-
-  await spotify(`/playlists/${playlistId}/tracks`, {
-    method: 'PUT',
-    body: JSON.stringify({ uris: groups[0] || [] }),
-  });
-
-  setProgress(60);
-
-  for (let i = 1; i < groups.length; i++) {
-    await spotify(`/playlists/${playlistId}/tracks`, {
-      method: 'POST',
-      body: JSON.stringify({ uris: groups[i] }),
-    });
-
-    setStatus(`Writing shuffled playlist... ${Math.min((i + 1) * 100, uris.length)} of ${uris.length}`);
-    setProgress(60 + Math.floor((i / Math.max(groups.length - 1, 1)) * 40));
-  }
-}
-
-async function refreshTrueShuffle() {
-  els.refreshBtn.disabled = true;
-  setProgress(1);
-
-  setStatus('Connecting to Spotify...');
-  const me = await getMe();
-
-  setStatus('Loading your Liked Songs...');
-  const uris = await getAllSavedTrackUris();
-
-  if (!uris.length) throw new Error('No liked songs found.');
-
-  setStatus(`Randomising ${uris.length} liked songs...`);
-  setProgress(45);
-
-  const shuffled = trueShuffle(uris);
-
-  setStatus('Finding or creating playlist...');
-  setProgress(50);
-
-  const playlist = await findOrCreatePlaylist(me.id);
-
-  setStatus('Replacing playlist with fresh random order...');
-  await replacePlaylist(playlist.id, shuffled);
-
-  setProgress(100);
-  setStatus(`Done. Created/refreshed: ${PLAYLIST_NAME}\n\nOpen Spotify and play this playlist with Shuffle OFF and Repeat OFF.`);
-  els.refreshBtn.disabled = false;
-}
-
-function updateUi() {
-  els.clientId.value = getClientId();
-
-  const connected = tokenValid() || !!getTokenData();
-
-  els.loginBtn.disabled = connected;
-  els.refreshBtn.disabled = !connected;
-  els.logoutBtn.disabled = !connected;
-
-  if (connected) setStatus('Connected. Press Refresh True Shuffle.');
-}
-
-els.saveClientId.addEventListener('click', () => {
-  setClientId(els.clientId.value);
-  setStatus('Client ID saved. Now connect Spotify.');
-  updateUi();
-});
-
-els.loginBtn.addEventListener('click', async () => {
-  try {
-    await login();
-  } catch (e) {
-    setStatus(e.message);
-  }
-});
-
-els.refreshBtn.addEventListener('click', async () => {
-  try {
-    await refreshTrueShuffle();
-  } catch (e) {
-    setStatus(`Error: ${e.message}`);
-    els.refreshBtn.disabled = false;
-  }
-});
-
-els.logoutBtn.addEventListener('click', () => {
-  clearTokenData();
-  setStatus('Disconnected.');
-  updateUi();
-});
-
-(async function init() {
-  try {
-    await handleCallback();
-  } catch (e) {
-    setStatus(`Login error: ${e.message}`);
-  }
-
-  updateUi();
-})();
+  for (let i = 0; i
